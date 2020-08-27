@@ -1,7 +1,7 @@
 #ifndef BEDROCK_TYPES_HPP
 #define BEDROCK_TYPES_HPP
 
-// ...
+// Type aliases.
 
 #include <cstdint>
 
@@ -20,6 +20,11 @@ namespace br {
 
 	using size_t = u64;
 	using index_t = u64;
+
+	using f32 = float;
+	using f64 = double;
+
+	using byte = u8;
 }
 
 #endif

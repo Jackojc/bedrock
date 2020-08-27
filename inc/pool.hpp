@@ -1,7 +1,7 @@
 #ifndef BEDROCK_POOL_HPP
 #define BEDROCK_POOL_HPP
 
-// ...
+// A pool allocator.
 
 namespace br {
 	struct Pool {

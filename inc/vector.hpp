@@ -1,7 +1,7 @@
 #ifndef BEDROCK_VECTOR_HPP
 #define BEDROCK_VECTOR_HPP
 
-// ...
+// A dynamically growing array type.
 
 #include <cstdlib> // realloc
 

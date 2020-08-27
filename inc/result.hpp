@@ -1,7 +1,7 @@
 #ifndef BEDROCK_RESULT_HPP
 #define BEDROCK_RESULT_HPP
 
-// ...
+// A rust-like result type.
 
 namespace br {
 	struct GenericError {};

@@ -1,7 +1,7 @@
 #ifndef BEDROCK_SLICE_HPP
 #define BEDROCK_SLICE_HPP
 
-// ...
+// A slice type for a lightweight "view" into a container type.
 
 #include "types.hpp"
 

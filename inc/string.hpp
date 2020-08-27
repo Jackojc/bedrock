@@ -1,7 +1,7 @@
 #ifndef BEDROCK_STRING_HPP
 #define BEDROCK_STRING_HPP
 
-// ...
+// A UTF-8 string type.
 
 namespace br {
 	// todo: implement a UTF-8 string type.
