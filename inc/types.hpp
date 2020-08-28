@@ -23,6 +23,7 @@ namespace br {
 
 	using f32 = float;
 	using f64 = double;
+	using f128 = long double;
 
 	using byte = u8;
 }

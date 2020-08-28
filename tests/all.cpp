@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <file.hpp>
 #include <io.hpp>
 #include <memory.hpp>
@@ -22,6 +24,11 @@
 
 
 int main() {
+	br::Random rng = br::random_create(2382274);
+
+	for (int i = 0; i < 5; i++) {
+		std::cout << br::random_range(rng, 0, 5) << '\n';
+	}
 
 	return 0;
 }
