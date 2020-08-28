@@ -26,6 +26,8 @@
 int main() {
 	br::Random rng = br::random_create(2382274);
 
+	BR_RUNTIME_ASSERT(4 < 1, "hey");
+
 	for (int i = 0; i < 5; i++) {
 		std::cout << br::random_range(rng, 0, 5) << '\n';
 	}

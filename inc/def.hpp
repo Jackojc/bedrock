@@ -9,6 +9,10 @@ namespace br {
 		constexpr int SUCCESS = 0;
 		constexpr int FAILURE = 1;
 	}
+
+
+	#define STR(x) STR2(x)
+	#define STR2(x) #x
 }
 
 #endif
