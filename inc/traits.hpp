@@ -23,24 +23,23 @@ namespace br {
 		using void_t = void;
 
 
-		template <class Default, class AlwaysVoid,
-		          template<class...> class Op, class... Args>
+		template <class Default, class AlwaysVoid, template<class...> class Op, class... Args>
 		struct detector {
-		  using value_t = false_type;
-		  using type = Default;
+			using value_t = false_type;
+			using type = Default;
 		};
 
 		template <class Default, template<class...> class Op, class... Args>
 		struct detector<Default, void_t<Op<Args...>>, Op, Args...> {
-		  using value_t = true_type;
-		  using type = Op<Args...>;
+			using value_t = true_type;
+			using type = Op<Args...>;
 		};
 
 		struct nonesuch {
-		    nonesuch() = delete;
-		    ~nonesuch() = delete;
-		    nonesuch(nonesuch const&) = delete;
-		    void operator=(nonesuch const&) = delete;
+			nonesuch() = delete;
+			~nonesuch() = delete;
+			nonesuch(nonesuch const&) = delete;
+			void operator=(nonesuch const&) = delete;
 		};
 
 		template <template<class...> class Op, class... Args>
