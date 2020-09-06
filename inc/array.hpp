@@ -3,11 +3,12 @@
 
 // A wrapper around C-style arrays which doesn't decay to a pointer.
 
-#include <types.hpp>
+#include "types.hpp"
+#include "traits.hpp"
 
 namespace br {
 	template <typename T, br::size_t N>
-	struct Array {
+	struct Array: Container<Array<T, N>> {
 		T arr[N];
 	};
 

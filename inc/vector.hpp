@@ -5,11 +5,12 @@
 
 #include <cstdlib> // realloc
 
-#include <types.hpp>
+#include "types.hpp"
+#include "traits.hpp"
 
 namespace br {
 	template <typename T>
-	struct Vector {
+	struct Vector: Container<Vector<T>> {
 		br::size_t used;   // Capacity used so far.
 		br::size_t total;  // Total capacity.
 

@@ -3,9 +3,12 @@
 
 // A pool allocator.
 
-namespace br {
-	struct Pool {
+#include "traits.hpp"
 
+namespace br {
+	struct Pool: Allocator<Pool> {
+		void free(void*) { }
+		void alloc(br::u64) { }
 	};
 
 	// todo

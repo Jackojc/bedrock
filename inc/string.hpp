@@ -3,9 +3,11 @@
 
 // A UTF-8 string type.
 
+#include "traits.hpp"
+
 namespace br {
 	// todo: implement a UTF-8 string type.
-	struct String {
+	struct String: Container<String> {
 
 	};
 

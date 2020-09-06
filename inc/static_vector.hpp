@@ -3,12 +3,13 @@
 
 // A vector with a fixed, static size.
 
-#include <types.hpp>
+#include "types.hpp"
+#include "traits.hpp"
 
 namespace br {
 	// vector with fixed capacity
 	template <typename T, br::size_t N>
-	struct StaticVector {
+	struct StaticVector: Container<StaticVector<T, N>> {
 		T buffer[N];
 		br::size_t used;   // Capacity used so far.
 	};

@@ -3,6 +3,9 @@
 
 // Common functions.
 
+#include <cstdio>
+#include <cstdlib>
+
 #include "def.hpp"
 
 namespace br {
