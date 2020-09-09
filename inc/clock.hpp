@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_CLOCK_HPP
 #define BEDROCK_CLOCK_HPP
 

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_STATIC_VECTOR_HPP
 #define BEDROCK_STATIC_VECTOR_HPP
 

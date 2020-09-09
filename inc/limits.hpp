@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_LIMITS_HPP
 #define BEDROCK_LIMITS_HPP
 

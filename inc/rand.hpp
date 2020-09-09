@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_RAND_HPP
 #define BEDROCK_RAND_HPP
 

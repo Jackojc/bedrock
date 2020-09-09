@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_CHAR_HPP
 #define BEDROCK_CHAR_HPP
 
@@ -40,6 +41,14 @@ namespace br {
 			or chr == 0x205F
 			or chr == 0x3000
 		;
+	}
+
+
+	constexpr br::size_t size(const char* str) noexcept {
+		br::index_t i = 0;
+		while (*str++ != '\0')
+			++i;
+		return i;
 	}
 
 

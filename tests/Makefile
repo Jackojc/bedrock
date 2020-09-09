@@ -34,7 +34,7 @@ options:
 	@echo "debug = $(debug)"
 	@echo "flags = -std=$(STD) $(CXXWARN) $(CXXFLAGS)"
 
-bedrock: config
+bedrock: $(SRC) config
 	@$(CXX) -std=$(STD) $(CXXWARN) $(CXXFLAGS) $(LDFLAGS) $(CPPFLAGS) $(INC) $(LIBS) -o $(BUILD_DIR)/$(TARGET) $(SRC)
 
 clean:

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_ALIAS_HPP
 #define BEDROCK_ALIAS_HPP
 

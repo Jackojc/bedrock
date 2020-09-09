@@ -1,9 +1,30 @@
+#pragma once
 #ifndef BEDROCK_IO_HPP
 #define BEDROCK_IO_HPP
 
 // ...
 
+#include <cstdio>
+
 namespace br {
+	template <typename T1, typename... Ts>
+	inline void print(const T1& first, const Ts&... rest) noexcept {
+		print(first);
+		(print(rest), ...);
+	}
+
+
+	// inline void printer(char c) {
+	// 	std::putc(c, stdout);
+	// }
+
+	// inline void printer(const char* str) {
+	// 	while (*str != '\0')
+	// 		printer(*str++);
+	// }
+
+
+
 	// todo:
 	// - custom printf
 	// - colour support

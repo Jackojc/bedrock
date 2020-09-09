@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_ASSERT_HPP
 #define BEDROCK_ASSERT_HPP
 
@@ -9,13 +10,11 @@
 #include <cstdio>
 
 #include "def.hpp"
-#include "io.hpp"
+#include "exit.hpp"
 
 namespace br {
 	// todo
-	// assert macros with the ability to be disabled
 	// maybe add some pretty colours too and line/file info
-	// compile time and runtime asserts
 
 
 	#ifdef NDEBUG
@@ -26,21 +25,26 @@ namespace br {
 
 
 	#ifndef BR_DISABLE_ASSERT
-		#define BR_RUNTIME_ASSERT(cond, msg) \
+		#define BR_UNREACHABLE() \
 			do { \
-				if (not (cond)) \
-					std::fprintf(stderr, "[%s:%d] assert '%s' failed with '%s'!\n", __FILE__, __LINE__, #cond, msg); \
-					br::halt(); \
+				br::halt("[", __FILE__, ":", BR_STR(__LINE__), "] unreachable code!"); \
 			} while (0)
 
-		#define BR_COMPILETIME_ASSERT(cond, msg) \
+		#define BR_ASSERT(cond, msg) \
 			do { \
-				static_assert(cond, "[" __FILE__ ":" STR(__LINE__) "] assert '" #cond "' failed with '" msg "'!\n"); \
+				if (not (cond)) \
+					br::halt("[", __FILE__, ":", BR_STR(__LINE__), "] assert '", BR_STR(cond), "' failed with '", msg, "'!"); \
+			} while (0)
+
+		#define BR_STATIC_ASSERT(cond, msg) \
+			do { \
+				static_assert(cond, "[" __FILE__ ":" BR_STR(__LINE__) "] assert '" #cond "' failed with '" msg "'!\n"); \
 			} while (0)
 
 	#else
-		#define BR_RUNTIME_ASSERT(cond, msg) do {} while (0)
-		#define BR_COMPILETIME_ASSERT(cond, msg) do {} while (0)
+		#define BR_UNREACHABLE() do {} while (0)
+		#define BR_ASSERT(cond, msg) do {} while (0)
+		#define BR_STATIC_ASSERT(cond, msg) do {} while (0)
 
 	#endif
 }

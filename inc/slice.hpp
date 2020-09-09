@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_SLICE_HPP
 #define BEDROCK_SLICE_HPP
 

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BEDROCK_PRED_HPP
 #define BEDROCK_PRED_HPP
 
