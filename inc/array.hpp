@@ -4,8 +4,9 @@
 
 // A wrapper around C-style arrays which doesn't decay to a pointer.
 
-#include "types.hpp"
-#include "traits.hpp"
+#include "type.hpp"
+#include "trait.hpp"
+#include "algorithm.hpp"
 
 namespace br {
 	// Iterator.
@@ -13,8 +14,35 @@ namespace br {
 	struct ArrayIterator: BiDirectionalIterator<ArrayIterator<T>> {
 		T* ptr;
 
+
+		constexpr T& operator*() const {
+			return *ptr;
+		}
+
 		void next() { ++ptr; }
 		void prev() { --ptr; }
+
+		constexpr ArrayIterator<T>& operator++() noexcept {
+			++ptr;
+			return *this;
+		}
+
+		constexpr ArrayIterator<T> operator++(int) noexcept {
+			auto tmp = *this;
+			++ptr;
+			return tmp;
+		}
+
+		constexpr ArrayIterator<T>& operator--() noexcept {
+			--ptr;
+			return *this;
+		}
+
+		constexpr ArrayIterator<T> operator--(int) noexcept {
+			auto tmp = *this;
+			--ptr;
+			return tmp;
+		}
 	};
 
 
@@ -26,9 +54,7 @@ namespace br {
 		return lhs.ptr != rhs.ptr;
 	}
 
-	template <typename T> constexpr T& operator*(const ArrayIterator<T>& it) {
-		return *it.ptr;
-	}
+
 
 
 
@@ -59,12 +85,17 @@ namespace br {
 		T tmp[] = { first, elements... };
 		Array<T, sizeof...(Ts) + 1> arr;
 
-		for (br::index_t i = 0; i < sizeof...(Ts) + 1; i++) {
+		for (br::index_t i = 0; i < sizeof...(Ts) + 1; i++)
 			arr.buffer[i] = tmp[i];
-		}
 
 		return arr;
 	}
+
+	template <typename T, br::size_t N>
+	constexpr auto arr_create() {
+		return br::Array<T, N>{};
+	}
+
 
 
 	template <typename T, br::size_t N>
@@ -76,16 +107,6 @@ namespace br {
 	constexpr br::size_t size(const Array<T, N>&) {
 		return N;
 	}
-
-	// template <typename T, br::size_t N>
-	// constexpr bool eq(const Array<T, N>& lhs, const Array<T, N>& rhs) {
-	// 	bool same = true;
-
-	// 	for (br::index_t i = 0; i < N; ++i)
-	// 		same = lhs[i] == rhs[i];
-
-	// 	return same;
-	// }
 
 	template <typename T, br::size_t N>
 	constexpr bool operator==(const Array<T, N>& lhs, const Array<T, N>& rhs) {

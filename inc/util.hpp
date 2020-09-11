@@ -11,6 +11,9 @@ namespace br {
 		B b;
 	};
 
+	template <typename A, typename B>
+	Pair(A a, B b) -> Pair<A, B>;
+
 
 	template <typename T> constexpr void swap(T& a, T& b) noexcept {
 		T tmp = a;

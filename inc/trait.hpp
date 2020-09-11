@@ -4,7 +4,7 @@
 
 // Common trait utilities.
 
-#include "types.hpp"
+#include "type.hpp"
 
 namespace br {
 	// Core trait helpers.
@@ -101,7 +101,7 @@ namespace br {
 	namespace detail {
 		// Check for functionality implemented by T. Poor man's concepts.
 		template <typename T>
-		using allocate_t = decltype(declval<T>().allocate(declval<br::size_t>(), declval<br::size_t>()));
+		using allocate_t = decltype(declval<T>().allocate(declval<br::size_t>()));
 
 		template <typename T>
 		using release_t = decltype(declval<T>().release(declval<void*>()));
@@ -120,8 +120,8 @@ namespace br {
 			static_assert(detail::has_release<T>::value, "T does not implement release.");
 		}
 
-		constexpr auto allocate_(br::size_t sz, br::size_t n) {
-			return static_cast<T*>(this)->allocate(sz, n);
+		constexpr auto allocate_(br::size_t sz) {
+			return static_cast<T*>(this)->allocate(sz);
 		}
 
 		constexpr auto release_(void* ptr) {
@@ -147,19 +147,19 @@ namespace br {
 
 	// Free function helpers.
 	template <typename X, typename T>
-	auto allocate(Allocator<T>& alloc, br::size_t n) {
+	auto allocate(Allocator<T>& alloc) {
 		static_assert(is_allocator<T>::value, "T is not an Allocator.");
 		static_assert(detail::has_allocate<T>::value, "T does not implement allocate.");
 
-		return static_cast<X*>(alloc.allocate_(sizeof(X), n));
+		return static_cast<X*>(alloc.allocate_(sizeof(X)));
 	}
 
 	template <typename X, typename T>
-	auto release(Allocator<T>& alloc, X* ptr) {
+	void release(Allocator<T>& alloc, X* ptr) {
 		static_assert(is_allocator<T>::value, "T is not an Allocator.");
 		static_assert(detail::has_release<T>::value, "T does not implement release.");
 
-		return alloc.release_(static_cast<void*>(ptr));
+		alloc.release_(static_cast<void*>(ptr));
 	}
 
 
@@ -176,6 +176,12 @@ namespace br {
 
 		template <typename T> using deref_t = decltype(*declval<T>());
 
+		template <typename T> using pre_incr_t = decltype(++declval<T>());
+		template <typename T> using post_incr_t = decltype(declval<T>()++);
+
+		template <typename T> using pre_decr_t = decltype(--declval<T>());
+		template <typename T> using post_decr_t = decltype(declval<T>()--);
+
 
 		template <typename T> using has_next = is_detected<prev_t, T>;
 		template <typename T> using has_prev = is_detected<next_t, T>;
@@ -184,6 +190,12 @@ namespace br {
 		template <typename T> using has_cmp_not_eq = is_detected<cmp_not_eq_t, T>;
 
 		template <typename T> using has_deref = is_detected<deref_t, T>;
+
+		template <typename T> using has_pre_incr = is_detected<pre_incr_t, T>;
+		template <typename T> using has_post_incr = is_detected<post_incr_t, T>;
+
+		template <typename T> using has_pre_decr = is_detected<pre_decr_t, T>;
+		template <typename T> using has_post_decr = is_detected<post_decr_t, T>;
 	}
 
 
@@ -198,6 +210,12 @@ namespace br {
 			static_assert(detail::has_cmp_not_eq<T>::value, "T does not implement operator!=.");
 
 			static_assert(detail::has_deref<T>::value, "T does not implement operator*.");
+
+			static_assert(detail::has_pre_incr<T>::value, "T does not implement operator++(int).");
+			static_assert(detail::has_post_incr<T>::value, "T does not implement operator++.");
+
+			static_assert(detail::has_pre_decr<T>::value, "T does not implement operator--(int).");
+			static_assert(detail::has_post_decr<T>::value, "T does not implement operator--.");
 		}
 
 		constexpr auto next_() {
@@ -238,6 +256,8 @@ namespace br {
 	};
 
 
+
+
 	// Free function comparitors.
 	template <typename T> bool operator==(const ForwardIterator<T>& a, const ForwardIterator<T>& b) {
 		return static_cast<T>(a) == static_cast<T>(b);
@@ -270,7 +290,7 @@ namespace br {
 	template <typename T> constexpr bool is_forward_iterator_v = is_forward_iterator<T>::value;
 
 	template <typename T>
-	constexpr bool is_iterator = is_bidirectional_iterator_v<T> or is_forward_iterator_v<T>;
+	constexpr bool is_iterator_v = is_bidirectional_iterator_v<T> or is_forward_iterator_v<T>;
 
 
 	// Free functions for operating on iterators.
@@ -322,9 +342,6 @@ namespace br {
 
 
 
-
-
-
 	// Container trait.
 	namespace detail {
 		// Detect functionality in T. Poor man's concepts.
@@ -359,6 +376,19 @@ namespace br {
 	};
 
 
+	template <typename T>
+	struct Range {
+		static_assert(is_iterator_v<T>, "T is not an iterator.");
+
+		T begin;
+		T end;
+	};
+
+	template <typename T>
+	Range(T a, T b) -> Range<T>;
+
+
+
 	// Check if T is a container.
 	namespace detail {
 		template <typename T>
@@ -375,27 +405,24 @@ namespace br {
 
 	// Free functions helpers.
 	template <typename T> auto begin(Container<T>& c) {
-		static_assert(is_container<T>::value, "T is not a Container.");
+		static_assert(is_container_v<T>, "T is not a Container.");
 		static_assert(detail::has_begin<T>::value, "T does not implement begin.");
 
 		return c.begin_();
 	}
 
 	template <typename T> auto end(Container<T>& c) {
-		static_assert(is_container<T>::value, "T is not a Container.");
+		static_assert(is_container_v<T>, "T is not a Container.");
 		static_assert(detail::has_end<T>::value, "T does not implement end.");
 
 		return c.end_();
 	}
 
 
-	// Overload for static c-style arrays.
-	template <typename T, br::size_t N> auto begin(T arr[N]) {
-		return arr;
-	}
+	template <typename T> auto range(Container<T>& c) {
+		static_assert(is_container_v<T>, "T is not a Container.");
 
-	template <typename T, br::size_t N> auto end(T arr[N]) {
-		return arr + (N + 1);
+		return Range { begin(c), end(c) };
 	}
 }
 

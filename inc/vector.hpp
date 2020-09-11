@@ -6,8 +6,8 @@
 
 #include <cstdlib> // realloc
 
-#include "types.hpp"
-#include "traits.hpp"
+#include "type.hpp"
+#include "trait.hpp"
 
 namespace br {
 	template <typename T>

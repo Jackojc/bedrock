@@ -2,18 +2,23 @@
 #ifndef BEDROCK_EXIT_HPP
 #define BEDROCK_EXIT_HPP
 
-// ...
+// Exit & Abort related functions.
+// TODO: Implement platform specific exit & abort functions for Windows.
 
 #include <cstdio>
 
 #include "def.hpp"
 
-#ifdef BR_PLATFORM_LINUX
+#if defined(BR_PLATFORM_LINUX)
 	extern "C" {
 		#include <sys/types.h>
 		#include <unistd.h>
 		#include <signal.h>
 	}
+
+#else
+	#include <cstdlib>
+
 #endif
 
 namespace br {
@@ -25,26 +30,34 @@ namespace br {
 	constexpr int EXIT_FAILURE = 1;
 	constexpr int EXIT_SUCCESS = 0;
 
-	#if defined(BR_PLATFORM_LINUX) || defined(BR_PLATFORM_UNIX)
+	// Linux specific functions.
+	#if defined(BR_PLATFORM_LINUX)
 		[[noreturn]] inline void exit(int code) noexcept {
 			_exit(code);
 		}
 
-		#if defined(BR_COMPILER_GCC) || defined(BR_COMPILER_CLANG)
-			[[noreturn]] inline void abort() noexcept {
-				__builtin_trap();
-			}
-		#else
-			inline void abort() noexcept {
-				kill(getpid(), SIGABRT);
-			}
-		#endif
+		[[noreturn]] inline void abort() noexcept {
+			kill(getpid(), SIGABRT);
 
+			#if defined(BR_COMPILER_GCC) || defined(BR_COMPILER_CLANG)
+				__builtin_trap();
+			#endif
+		}
+
+	// Fallback to C standard library.
 	#else
-		#error UNIMPLEMENTED
+		[[noreturn]] inline void exit(int code) noexcept {
+			std::exit(code);
+		}
+
+		[[noreturn]] inline void abort() noexcept {
+			std::abort();
+		}
 
 	#endif
 
+
+	// Exit with a message.
 	template <typename... Ts>
 	[[noreturn]] void halt(Ts&... args) noexcept {
 		(std::fputs(args, stderr), ...);

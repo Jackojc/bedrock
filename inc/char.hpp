@@ -4,7 +4,7 @@
 
 // ...
 
-#include "types.hpp"
+#include "type.hpp"
 
 namespace br {
 	// Find byte size of UTF-8 character.

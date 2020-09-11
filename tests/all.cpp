@@ -3,47 +3,44 @@
 #include <file.hpp>
 #include <io.hpp>
 #include <memory.hpp>
-#include <pool.hpp>
+#include <allocator.hpp>
 #include <result.hpp>
-#include <slice.hpp>
 #include <string.hpp>
-#include <types.hpp>
+#include <type.hpp>
 #include <util.hpp>
 #include <vector.hpp>
 #include <array.hpp>
 #include <clock.hpp>
-#include <limits.hpp>
+#include <limit.hpp>
 #include <assert.hpp>
 #include <static_vector.hpp>
 #include <alias.hpp>
-#include <args.hpp>
+#include <arg.hpp>
 #include <char.hpp>
 #include <def.hpp>
 #include <pred.hpp>
 #include <rand.hpp>
-#include <traits.hpp>
+#include <trait.hpp>
 #include <exit.hpp>
 
 #include <ctime>
 
 
-// struct ArenaAllocator: br::Allocator<ArenaAllocator> {
-// 	void release(void*) {
-
-// 	}
-
-// 	void* allocate(br::size_t , br::size_t ) {
-// 		return nullptr;
-// 	}
-// };
-
-
-
 int main() {
 	// Allocators.
-	// ArenaAllocator mem;
-	// br::allocate<int>(mem, 10);
-	// br::Pool p;
+	br::Pool p = br::pool_create(sizeof(int) * 10);
+
+	int* a = br::allocate<int>(p);
+	int* b = br::allocate<int>(p);
+	int* c = br::allocate<int>(p);
+
+	*c = 1;
+	*b = 2;
+	*a = 3;
+
+	std::printf("%p = %d\n", (void*)a, *a);
+	std::printf("%p = %d\n", (void*)b, *b);
+	std::printf("%p = %d\n", (void*)c, *c);
 
 
 	// Random.
@@ -59,13 +56,21 @@ int main() {
 
 	std::printf("arr size = %llu\n", br::size(arr));
 
-	for (auto it = br::begin(arr); it != br::end(arr); br::next(it))
-		std::printf("%d\n", *it);
+	auto [begin, end] = br::range(arr);
 
-	for (br::index_t i = 0; i != br::size(arr); ++i)
-		std::printf("%d\n", br::at(arr, i));
+	for (auto it = begin; it != end; ++it)
+		std::printf("%d ", *it);
+	std::puts("");
 
-	// br::print("hey");
+
+	auto arr2 = br::arr_create<int, 10>();
+	br::fill(arr2, 2);
+
+
+	for (auto x: arr2)
+		std::printf("%d ", x);
+	std::puts("");
+
 
 
 	// BR_ASSERT(1 == 2, "wtf");

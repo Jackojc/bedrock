@@ -4,8 +4,8 @@
 
 // A vector with a fixed, static size.
 
-#include "types.hpp"
-#include "traits.hpp"
+#include "type.hpp"
+#include "trait.hpp"
 
 namespace br {
 	// vector with fixed capacity

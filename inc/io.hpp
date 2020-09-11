@@ -7,6 +7,15 @@
 #include <cstdio>
 
 namespace br {
+	// struct File {};
+	// struct Printer {};
+
+
+	// Printer& operator()(Printer& p, int i) {
+
+	// }
+
+
 	template <typename T1, typename... Ts>
 	inline void print(const T1& first, const Ts&... rest) noexcept {
 		print(first);

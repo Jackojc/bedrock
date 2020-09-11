@@ -4,7 +4,7 @@
 
 // A UTF-8 string type.
 
-#include "traits.hpp"
+#include "trait.hpp"
 
 namespace br {
 	// todo: implement a UTF-8 string type.
