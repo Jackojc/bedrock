@@ -44,14 +44,6 @@ namespace br {
 	}
 
 
-	constexpr br::size_t size(const char* str) noexcept {
-		br::index_t i = 0;
-		while (*str++ != '\0')
-			++i;
-		return i;
-	}
-
-
 	// constexpr bool is_digit(const char* c) {
 	// 	return
 	// }

@@ -42,6 +42,8 @@ int main() {
 	std::printf("%p = %d\n", (void*)b, *b);
 	std::printf("%p = %d\n", (void*)c, *c);
 
+	br::pool_destroy(p);
+
 
 	// Random.
 	br::Random rng = br::random_create(time(nullptr));

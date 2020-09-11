@@ -115,7 +115,7 @@ namespace br {
 	// Allocator trait.
 	template <typename T>
 	struct Allocator {
-		Allocator() {
+		constexpr Allocator() {
 			static_assert(detail::has_allocate<T>::value, "T does not implement allocate.");
 			static_assert(detail::has_release<T>::value, "T does not implement release.");
 		}
@@ -202,7 +202,7 @@ namespace br {
 	// Bi-Directional Iterator trait.
 	template <typename T>
 	struct BiDirectionalIterator {
-		BiDirectionalIterator() {
+		constexpr BiDirectionalIterator() {
 			static_assert(detail::has_next<T>::value, "T does not implement next.");
 			static_assert(detail::has_prev<T>::value, "T does not implement prev.");
 
@@ -245,7 +245,7 @@ namespace br {
 	// Forward Iterator.
 	template <typename T>
 	struct ForwardIterator {
-		ForwardIterator() {
+		constexpr ForwardIterator() {
 			static_assert(detail::has_next<T>::value, "T does not implement next.");
 		}
 
@@ -361,9 +361,11 @@ namespace br {
 	// Base container trait.
 	template <typename T>
 	struct Container {
-		Container() {
+		constexpr Container() {
 			static_assert(detail::has_begin<T>::value, "T does not implement begin.");
 			static_assert(detail::has_end<T>::value, "T does not implement end.");
+
+			static_assert(detail::has_subscript<T>::value, "T does not implement subscript.");
 		}
 
 		constexpr auto begin_() {

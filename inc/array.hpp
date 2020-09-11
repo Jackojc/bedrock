@@ -12,7 +12,7 @@ namespace br {
 	// Iterator.
 	template <typename T>
 	struct ArrayIterator: BiDirectionalIterator<ArrayIterator<T>> {
-		T* ptr;
+		T* ptr = nullptr;
 
 
 		constexpr T& operator*() const {
@@ -64,16 +64,20 @@ namespace br {
 		T buffer[N]{0};
 
 		// Obtain iterators.
-		auto begin() {
+		constexpr auto begin() noexcept {
 			ArrayIterator<T> it;
 			it.ptr = buffer;
 			return it;
 		}
 
-		auto end() {
+		constexpr auto end() noexcept {
 			ArrayIterator<T> it;
 			it.ptr = buffer + N;
 			return it;
+		}
+
+		constexpr T& operator[](br::index_t i) noexcept {
+			return buffer[i];
 		}
 	};
 
