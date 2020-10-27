@@ -16,14 +16,14 @@
 
 namespace br {
 	namespace detail {
-		inline br::u64 splitmix64(br::u64 seed) {
+		constexpr br::u64 splitmix64(br::u64 seed) {
 			seed = (seed ^ (seed >> 30)) * 0xBF58476D1CE4E5B9;
 			seed = (seed ^ (seed >> 27)) * 0x94D049BB133111EB;
 			return seed ^ (seed >> 31);
 		}
 
 
-		inline br::u64 rotl(br::u64 x, br::i32 k) {
+		constexpr br::u64 rotl(br::u64 x, br::i32 k) {
 			return (x << k) | (x >> (64 - k));
 		}
 	}
@@ -34,8 +34,8 @@ namespace br {
 	};
 
 
-	br::Random random_create(br::u64 seed) {
-		br::Random state;
+	constexpr br::Random random_create(br::u64 seed) {
+		br::Random state {};
 
 		seed = detail::splitmix64(seed);
 		state.state[0] = seed;
@@ -53,7 +53,7 @@ namespace br {
 	}
 
 
-	br::u64 random_next(br::Random& rng) {
+	constexpr br::u64 random_next(br::Random& rng) {
 		auto& s = rng.state;
 
 		const br::u64 result = detail::rotl(s[0] + s[3], 23) + s[0];
@@ -71,9 +71,9 @@ namespace br {
 	}
 
 
-	br::u64 random_range(Random& rng, br::u64 min, br::u64 max) {
+	constexpr br::u64 random_range(Random& rng, br::u64 min, br::u64 max) {
 		br::u64 range = max - min + 1;
-		br::u64 x, r;
+		br::u64 x = 0, r = 0;
 
 		do {
 			x = br::random_next(rng);

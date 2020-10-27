@@ -6,49 +6,39 @@
 
 #include "type.hpp"
 #include "trait.hpp"
+#include "char.hpp"
 
 namespace br {
-	struct StringIterator: BiDirectionalIterator<StringIterator> {
+	struct StringIterator: ForwardIterator<StringIterator> {
 		char* ptr = nullptr;
 
 		constexpr auto& operator*() const {
-			return *ptr;
+			return ptr;
 		}
 
-		void next() { ++ptr; }
-		void prev() { --ptr; }
+		constexpr void next() { ptr += utf8_char_size(ptr); }
 
 		constexpr auto& operator++() noexcept {
-			++ptr;
+			ptr += utf8_char_size(ptr);
 			return *this;
 		}
 
 		constexpr auto operator++(int) noexcept {
 			auto tmp = *this;
-			++ptr;
+			ptr += utf8_char_size(ptr);
 			return tmp;
 		}
 
-		constexpr auto& operator--() noexcept {
-			--ptr;
-			return *this;
+		constexpr bool operator==(const StringIterator& rhs) {
+			return ptr == rhs.ptr;
 		}
 
-		constexpr auto operator--(int) noexcept {
-			auto tmp = *this;
-			--ptr;
-			return tmp;
+		constexpr bool operator!=(const StringIterator& rhs) {
+			return ptr != rhs.ptr;
 		}
 	};
 
 
-	template <typename T> constexpr bool operator==(const StringIterator& lhs, const StringIterator& rhs) {
-		return lhs.ptr == rhs.ptr;
-	}
-
-	template <typename T> constexpr bool operator!=(const StringIterator& lhs, const StringIterator& rhs) {
-		return lhs.ptr != rhs.ptr;
-	}
 
 
 
@@ -91,17 +81,24 @@ namespace br {
 		String ss;
 
 		br::size_t sz = 0;
-		while (*str++ != '\0')
-			++sz;
+		br::size_t chars = 0;
+		auto tmp = str;
 
-		auto buffer = br::allocate(alloc, sz);
+		while (*tmp != '\0') {
+			auto cs = utf8_char_size(tmp);
+			sz += cs;
+			tmp += cs;
+			chars++;
+		}
+
+		auto buffer = br::allocate<char>(alloc, sz);
 
 		for (br::index_t i = 0; i < sz; ++i)
 			buffer[i] = str[i];
 
 		ss.buffer = buffer;
-		ss.char_size = utf8_char_size(buffer);
 		ss.buffer_size = sz;
+		ss.char_size = chars;
 
 		return ss;
 	}
@@ -148,7 +145,8 @@ namespace br {
 
 
 	// todo
-	// - str_cat     : append another string
+	// - str_cat      : append another string
+	// - str_validate : check that a string is valid utf-8
 }
 
 #endif

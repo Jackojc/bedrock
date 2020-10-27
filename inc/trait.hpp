@@ -155,6 +155,14 @@ namespace br {
 	}
 
 	template <typename X, typename T>
+	auto allocate(Allocator<T>& alloc, br::size_t bytes) {
+		static_assert(is_allocator<T>::value, "T is not an Allocator.");
+		static_assert(detail::has_allocate<T>::value, "T does not implement allocate.");
+
+		return static_cast<X*>(alloc.allocate_(bytes));
+	}
+
+	template <typename X, typename T>
 	void release(Allocator<T>& alloc, X* ptr) {
 		static_assert(is_allocator<T>::value, "T is not an Allocator.");
 		static_assert(detail::has_release<T>::value, "T does not implement release.");
@@ -183,8 +191,8 @@ namespace br {
 		template <typename T> using post_decr_t = decltype(declval<T>()--);
 
 
-		template <typename T> using has_next = is_detected<prev_t, T>;
-		template <typename T> using has_prev = is_detected<next_t, T>;
+		template <typename T> using has_next = is_detected<next_t, T>;
+		template <typename T> using has_prev = is_detected<prev_t, T>;
 
 		template <typename T> using has_cmp_eq = is_detected<cmp_eq_t, T>;
 		template <typename T> using has_cmp_not_eq = is_detected<cmp_not_eq_t, T>;
@@ -247,10 +255,17 @@ namespace br {
 	struct ForwardIterator {
 		constexpr ForwardIterator() {
 			static_assert(detail::has_next<T>::value, "T does not implement next.");
+
+			static_assert(detail::has_cmp_eq<T>::value, "T does not implement operator==.");
+			static_assert(detail::has_cmp_not_eq<T>::value, "T does not implement operator!=.");
+
+			static_assert(detail::has_deref<T>::value, "T does not implement operator*.");
+
+			static_assert(detail::has_pre_incr<T>::value, "T does not implement operator++(int).");
+			static_assert(detail::has_post_incr<T>::value, "T does not implement operator++.");
 		}
 
-		auto next_() {
-			static_assert(detail::has_next<T>::value, "T does not implement next.");
+		constexpr auto next_() {
 			return static_cast<T*>(this)->next();
 		}
 	};
@@ -259,13 +274,13 @@ namespace br {
 
 
 	// Free function comparitors.
-	template <typename T> bool operator==(const ForwardIterator<T>& a, const ForwardIterator<T>& b) {
-		return static_cast<T>(a) == static_cast<T>(b);
-	}
+	// template <typename T> bool operator==(const ForwardIterator<T>& a, const ForwardIterator<T>& b) {
+	// 	return static_cast<T>(a) == static_cast<T>(b);
+	// }
 
-	template <typename T> bool operator!=(const ForwardIterator<T>& a, const ForwardIterator<T>& b) {
-		return static_cast<T>(a) != static_cast<T>(b);
-	}
+	// template <typename T> bool operator!=(const ForwardIterator<T>& a, const ForwardIterator<T>& b) {
+	// 	return static_cast<T>(a) != static_cast<T>(b);
+	// }
 
 
 
