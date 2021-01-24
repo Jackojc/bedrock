@@ -10,20 +10,20 @@
 namespace br {
 	// vector with fixed capacity
 	template <typename T, br::size_t N>
-	struct StaticVector: Container<StaticVector<T, N>> {
+	struct SVector: Container<SVector<T, N>> {
 		T buffer[N];
 		br::size_t used;   // Capacity used so far.
 	};
 
 
 	template <typename T, br::size_t N>
-	auto& svec_at(const StaticVector<T, N>& vec, br::index_t i) {
+	auto& svec_at(const SVector<T, N>& vec, br::index_t i) {
 		return vec.buffer[i];
 	}
 
 
 	template <typename T, typename V>
-	auto& svec_append(const Vector<T>& vec, const V& value) {
+	auto& svec_append(const SVector<T>& vec, const V& value) {
 		// append `value` and grow if needed.
 	}
 

@@ -42,8 +42,6 @@ int main() {
 	std::printf("%p = %d\n", (void*)b, *b);
 	std::printf("%p = %d\n", (void*)c, *c);
 
-	br::pool_destroy(p);
-
 
 	// Random.
 	br::Random rng = br::random_create(time(nullptr));
@@ -75,7 +73,19 @@ int main() {
 
 
 
+	// String
+	auto str = br::str_create(p, "hello π!");
+
+	std::printf("size  = %llu\n", br::size(str));
+	std::printf("bytes = %llu\n", br::bytes(str));
+
+
+
+
 	// BR_ASSERT(1 == 2, "wtf");
+
+	br::str_destroy(p, str);
+	br::pool_destroy(p);
 
 	return 0;
 }
