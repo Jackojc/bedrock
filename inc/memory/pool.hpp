@@ -6,8 +6,8 @@
 
 #include <cstdlib>
 
-#include "type.hpp"
-#include "trait.hpp"
+#include "../core/type.hpp"
+#include "../core/trait.hpp"
 
 namespace br {
 	struct Pool: Allocator<Pool> {

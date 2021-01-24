@@ -4,7 +4,7 @@
 
 // Common trait utilities.
 
-#include "type.hpp"
+#include "../core/type.hpp"
 
 namespace br {
 	// Core trait helpers.

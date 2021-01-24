@@ -12,7 +12,7 @@
 // https://www.pcg-random.org/posts/bounded-rands.html
 // https://github.com/imneme/bounded-rands/blob/master/bounded64.cpp#L213
 
-#include "type.hpp"
+#include "../core/type.hpp"
 
 namespace br {
 	namespace detail {

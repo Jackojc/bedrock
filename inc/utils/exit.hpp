@@ -7,7 +7,7 @@
 
 #include <cstdio>
 
-#include "def.hpp"
+#include "../core/def.hpp"
 
 #if defined(BR_PLATFORM_LINUX)
 	extern "C" {

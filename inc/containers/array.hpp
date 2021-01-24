@@ -4,15 +4,18 @@
 
 // A wrapper around C-style arrays which doesn't decay to a pointer.
 
-#include "type.hpp"
-#include "trait.hpp"
-#include "algorithm.hpp"
+#include "../core/type.hpp"
+#include "../core/trait.hpp"
+#include "../algorithms/algorithm.hpp"
 
 namespace br {
 	// Iterator.
 	template <typename T>
 	struct ArrayIterator: BiDirectionalIterator<ArrayIterator<T>> {
 		T* ptr = nullptr;
+
+
+		constexpr ArrayIterator(const T* const ptr_): ptr(ptr_) {}
 
 
 		constexpr T& operator*() const {
@@ -63,23 +66,50 @@ namespace br {
 	struct Array: Container<Array<T, N>> {
 		T buffer[N]{0};
 
+
+		constexpr br::size_t size() const noexcept {
+			return N;
+		}
+
+		constexpr T& at(br::index i) {
+			return buffer[i];
+		}
+
+		constexpr const T& at(br::index i) const {
+			return buffer[i];
+		}
+
+
 		// Obtain iterators.
-		constexpr auto begin() noexcept {
-			ArrayIterator<T> it;
-			it.ptr = buffer;
-			return it;
+		constexpr ArrayIterator<T> begin() noexcept {
+			return ArrayIterator<T>{buffer};
 		}
 
-		constexpr auto end() noexcept {
-			ArrayIterator<T> it;
-			it.ptr = buffer + N;
-			return it;
+		constexpr ArrayIterator<T> end() noexcept {
+			return ArrayIterator<T>{buffer + N};
 		}
 
+
+		constexpr const ArrayIterator<T> begin() const noexcept {
+			return ArrayIterator<T>{buffer};
+		}
+
+		constexpr const ArrayIterator<T> end() const noexcept {
+			return ArrayIterator<T>{buffer + N};
+		}
+
+
+		// Overloads.
 		constexpr T& operator[](br::index_t i) noexcept {
 			return buffer[i];
 		}
 	};
+
+
+	template <typename T, typename... Ts>
+	Array(T, Ts...) -> Array<T, 1 + sizeof...(Ts)>;
+
+
 
 
 	template <typename T, typename... Ts>
@@ -103,7 +133,12 @@ namespace br {
 
 
 	template <typename T, br::size_t N>
-	constexpr auto& at(const Array<T, N>& arr, br::index_t i) {
+	constexpr ArrayIterator<T>& at(const Array<T, N>& arr, br::index_t i) {
+		return arr.buffer[i];
+	}
+
+	template <typename T, br::size_t N>
+	constexpr const ArrayIterator<T>& at(const Array<T, N>& arr, br::index_t i) {
 		return arr.buffer[i];
 	}
 

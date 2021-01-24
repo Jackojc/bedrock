@@ -4,9 +4,9 @@
 
 // Slotmap. (Vector with stable indexes)
 
-#include "type.hpp"
-#include "trait.hpp"
-#include "algorithm.hpp"
+#include "../core/type.hpp"
+#include "../core/trait.hpp"
+#include "../algorithms/algorithm.hpp"
 
 namespace br {
 	struct SlotMap {

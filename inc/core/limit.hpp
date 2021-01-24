@@ -7,7 +7,7 @@
 #include <climits>
 #include <cfloat>
 
-#include "type.hpp"
+#include "../core/type.hpp"
 
 namespace br::limits {
 	template <typename T> T max();

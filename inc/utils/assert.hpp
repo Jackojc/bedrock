@@ -9,8 +9,8 @@
 
 #include <cstdio>
 
-#include "def.hpp"
-#include "exit.hpp"
+#include "../core/def.hpp"
+#include "../utils/exit.hpp"
 
 namespace br {
 	// todo

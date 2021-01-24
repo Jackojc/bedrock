@@ -5,34 +5,25 @@
 // Common functions.
 
 namespace br {
-	template <typename A, typename B>
-	struct Pair {
-		A a;
-		B b;
-	};
-
-	template <typename A, typename B>
-	Pair(A a, B b) -> Pair<A, B>;
-
-
-	template <typename T> constexpr void swap(T& a, T& b) noexcept {
-		T tmp = a;
+	template <typename T>
+	constexpr void swap(T& a, T& b) noexcept {
+		const T tmp = a;
 		a = b;
 		b = tmp;
 	}
 
-
-	template <typename T> constexpr auto min(const T& a, const T& b) noexcept {
+	template <typename T>
+	constexpr auto min(const T& a, const T& b) noexcept {
 		return (a < b ? a : b);
 	}
 
-
-	template <typename T> constexpr auto max(const T& a, const T& b) noexcept {
+	template <typename T>
+	constexpr auto max(const T& a, const T& b) noexcept {
 		return (a > b ? a : b);
 	}
 
-
-	template <typename T> constexpr size_t ptrdiff(T* a, T* b) noexcept {
+	template <typename T>
+	constexpr size_t ptrdiff(T* a, T* b) noexcept {
 		return max(a, b) - min(a, b);
 	}
 }

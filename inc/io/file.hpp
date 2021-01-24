@@ -4,7 +4,7 @@
 
 // ...
 
-#include "type.hpp"
+#include "../core/type.hpp"
 
 namespace br {
 	struct File {

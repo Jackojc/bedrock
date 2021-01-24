@@ -4,9 +4,9 @@
 
 // A UTF-8 string type.
 
-#include "type.hpp"
-#include "trait.hpp"
-#include "char.hpp"
+#include "../core/type.hpp"
+#include "../core/trait.hpp"
+#include "../utils/char.hpp"
 
 namespace br {
 	struct StringIterator: ForwardIterator<StringIterator> {
